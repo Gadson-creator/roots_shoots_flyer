@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roots & Shoots · Capacity Building</title>
+  <!-- Google Fonts + Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- html2pdf library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES – Roots & Shoots inspired palette
+       ============================================================ */
+    :root {
+      --primary: #1B5E20;
+      --primary-light: #4CAF50;
+      --primary-lighter: #81C784;
+      --secondary: #FFB300;
+      --secondary-light: #FFCA28;
+      --accent: #0D47A1;
+      --earth: #6D4C41;
+      --cream: #FFF8E7;
+      --background: #F5F7F0;
+      --text: #1E2A1E;
+      --white: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.78);
+      --shadow: 0 25px 50px -12px rgba(0, 20, 0, 0.15);
+      --shadow-hover: 0 40px 80px -20px rgba(0, 20, 0, 0.25);
+      --radius: 36px;
+      --glass: rgba(255, 248, 231, 0.5);
+      --glass-dark: rgba(20, 30, 20, 0.6);
+      --border-light: rgba(27, 94, 32, 0.12);
+      --border-dark: rgba(76, 175, 80, 0.15);
+      --transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      --transition-slow: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      --gradient-leaf: linear-gradient(145deg, #1B5E20, #388E3C);
+      --gradient-gold: linear-gradient(135deg, #FFB300, #FFCA28);
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1rem;
+      --text-lg: 1.125rem;
+      --text-xl: 1.25rem;
+      --text-2xl: 1.5rem;
+      --text-3xl: 2rem;
+      --text-4xl: 2.5rem;
+      --text-5xl: 3.2rem;
+      --text-6xl: 4rem;
+    }
+
+    /* dark mode */
+    body.dark {
+      --background: #121A12;
+      --text: #E8F0E6;
+      --card-bg: rgba(30, 42, 28, 0.85);
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      --shadow-hover: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+      --glass: rgba(20, 30, 20, 0.6);
+      --border-light: rgba(76, 175, 80, 0.15);
+      --border-dark: rgba(76, 175, 80, 0.25);
+    }
+
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: background 0.5s, color 0.5s;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    /* animated background grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(76, 175, 80, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 179, 0, 0.04) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: grainMove 25s ease-in-out infinite alternate;
+    }
+    @keyframes grainMove {
+      0% { transform: scale(1) rotate(0deg); }
+      100% { transform: scale(1.1) rotate(3deg); }
+    }
+
+    /* ===== FLYER CARD ===== */
+    .flyer {
+      max-width: 1320px;
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-light);
+      padding: 44px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.5s, border 0.4s, box-shadow 0.4s;
+      z-index: 1;
+      animation: flyerIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes flyerIn {
+      0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .flyer::before {
+      content: '🌿';
+      position: absolute;
+      font-size: 12rem;
+      opacity: 0.04;
+      top: -60px;
+      right: -40px;
+      transform: rotate(25deg);
+      pointer-events: none;
+    }
+    .flyer::after {
+      content: '🍃';
+      position: absolute;
+      font-size: 8rem;
+      opacity: 0.04;
+      bottom: -30px;
+      left: -30px;
+      transform: rotate(-15deg);
+      pointer-events: none;
+    }
+
+    /* floating leaves */
+    .leaf-float {
+      position: absolute;
+      font-size: 2.4rem;
+      opacity: 0.06;
+      pointer-events: none;
+      animation: leafDrift 20s infinite alternate ease-in-out;
+      z-index: 0;
+    }
+    .leaf-float:nth-child(1) { top: 12%; left: 3%; animation-duration: 24s; font-size: 2.8rem; }
+    .leaf-float:nth-child(2) { bottom: 15%; right: 5%; animation-duration: 28s; font-size: 3.2rem; }
+    .leaf-float:nth-child(3) { top: 55%; left: 85%; animation-duration: 22s; font-size: 2rem; }
+    .leaf-float:nth-child(4) { top: 30%; right: 2%; animation-duration: 26s; font-size: 1.6rem; opacity: 0.04; }
+
+    @keyframes leafDrift {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate(20px, -20px) rotate(10deg) scale(1.05); }
+      100% { transform: translate(-10px, 15px) rotate(-5deg) scale(0.95); }
+    }
+
+    /* ===== LEFT COLUMN ===== */
+    .flyer-left {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo-wrapper img {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 12px rgba(27, 94, 32, 0.15));
+      transition: transform 0.4s;
+    }
+    .logo-wrapper img:hover {
+      transform: scale(1.06);
+    }
+
+    .org-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gradient-leaf);
+      color: var(--white);
+      padding: 7px 22px 7px 18px;
+      border-radius: 60px;
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(27, 94, 32, 0.3);
+      white-space: nowrap;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .org-badge:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(27, 94, 32, 0.35);
+    }
+
+    .hero-title {
+      font-size: var(--text-6xl);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      font-weight: 800;
+      font-size: var(--text-3xl);
+      margin-top: 2px;
+      animation: shimmer 6s ease-in-out infinite alternate;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .hero-sub {
+      font-size: var(--text-lg);
+      font-weight: 400;
+      color: var(--text);
+      opacity: 0.7;
+      border-left: 5px solid var(--secondary);
+      padding-left: 20px;
+      margin-top: -4px;
+    }
+    .hero-sub strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .description {
+      font-size: var(--text-base);
+      color: var(--text);
+      opacity: 0.8;
+      max-width: 92%;
+      line-height: 1.7;
+    }
+
+    /* countdown */
+    .countdown {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .countdown-item {
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      padding: 10px 22px;
+      border-radius: 60px;
+      border: 1px solid var(--border-light);
+      font-weight: 600;
+      font-size: var(--text-base);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+    }
+    .countdown-item:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary-light);
+      box-shadow: 0 8px 24px rgba(27, 94, 32, 0.08);
+    }
+    .countdown-item i {
+      color: var(--primary);
+      font-size: 1rem;
+    }
+    .countdown-item span {
+      font-weight: 700;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+      font-size: var(--text-lg);
+    }
+
+    /* info cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .info-card {
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 16px 20px;
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      cursor: default;
+    }
+    .info-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(27, 94, 32, 0.08);
+      border-color: var(--primary-light);
+      background: rgba(255, 248, 231, 0.6);
+    }
+    body.dark .info-card:hover {
+      background: rgba(30, 50, 30, 0.5);
+    }
+    .info-card i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      width: 36px;
+      text-align: center;
+      transition: transform 0.4s;
+    }
+    .info-card:hover i {
+      transform: scale(1.15) rotate(-6deg);
+    }
+    .info-card .label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.5;
+      font-weight: 700;
+    }
+    .info-card .value {
+      font-weight: 600;
+      font-size: var(--text-base);
+      color: var(--text);
+    }
+
+    /* zoom block */
+    .zoom-block {
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 18px 24px;
+      border: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+    .zoom-block:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 8px 28px rgba(27, 94, 32, 0.06);
+      transform: translateY(-2px);
+    }
+    .zoom-block .label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      opacity: 0.5;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .zoom-block .label i {
+      color: var(--primary);
+      font-size: 0.9rem;
+    }
+    .zoom-link {
+      font-family: 'Inter', monospace;
+      font-size: var(--text-sm);
+      word-break: break-all;
+      background: rgba(0, 0, 0, 0.03);
+      padding: 8px 16px;
+      border-radius: 14px;
+      display: inline-block;
+      margin: 6px 0 10px 0;
+      color: var(--text);
+      border: 1px solid transparent;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .zoom-link:hover {
+      border-color: var(--primary);
+      background: rgba(27, 94, 32, 0.06);
+      transform: scale(1.01);
+    }
+    .zoom-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: var(--text-sm);
+    }
+    .zoom-meta span {
+      background: rgba(0, 0, 0, 0.02);
+      padding: 4px 16px;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    .zoom-meta span:hover {
+      background: rgba(27, 94, 32, 0.06);
+      border-color: var(--primary-light);
+    }
+    .zoom-meta i {
+      color: var(--primary);
+    }
+    .zoom-meta strong {
+      font-weight: 700;
+    }
+
+    /* language toggle */
+    .lang-toggle {
+      display: flex;
+      gap: 6px;
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      padding: 4px 6px;
+      border-radius: 60px;
+      border: 1px solid var(--border-light);
+      align-self: flex-start;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      color: var(--text);
+      opacity: 0.4;
+      transition: var(--transition);
+    }
+    .lang-btn.active {
+      opacity: 1;
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(27, 94, 32, 0.25);
+    }
+    .lang-btn:hover:not(.active) {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+
+    /* action buttons */
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: var(--text-base);
+      border: none;
+      background: var(--gradient-leaf);
+      color: var(--white);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 8px 28px rgba(27, 94, 32, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .btn:hover::after {
+      opacity: 1;
+    }
+    .btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 48px rgba(27, 94, 32, 0.3);
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      box-shadow: none;
+      border: 1.5px solid var(--border-light);
+    }
+    .btn-outline:hover {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+      box-shadow: 0 12px 36px rgba(27, 94, 32, 0.15);
+    }
+
+    /* social row */
+    .social-row {
+      display: flex;
+      gap: 18px;
+      margin-top: 4px;
+    }
+    .social-row a {
+      color: var(--text);
+      opacity: 0.35;
+      font-size: 1.2rem;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--glass);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--border-light);
+    }
+    .social-row a:hover {
+      opacity: 1;
+      transform: translateY(-3px) scale(1.1);
+      color: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px rgba(27, 94, 32, 0.1);
+    }
+
+    /* ===== RIGHT COLUMN ===== */
+    .flyer-right {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      text-align: center;
+    }
+
+    .speaker-frame {
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1/1.08;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 20, 0, 0.15);
+      background: #e0ece0;
+      border: 3px solid var(--white);
+      transition: var(--transition-slow);
+      position: relative;
+    }
+    .speaker-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 40px;
+      box-shadow: inset 0 0 60px rgba(27, 94, 32, 0.06);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .speaker-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .speaker-frame:hover img {
+      transform: scale(1.05);
+    }
+    .speaker-frame:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 50px 100px rgba(27, 94, 32, 0.2);
+    }
+
+    .speaker-name {
+      font-size: var(--text-2xl);
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .speaker-title {
+      font-size: var(--text-base);
+      opacity: 0.6;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .qr-placeholder {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      padding: 18px 32px;
+      border-radius: 32px;
+      border: 1.5px dashed var(--primary-light);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .qr-placeholder:hover {
+      border-color: var(--primary);
+      background: rgba(255, 248, 231, 0.5);
+      transform: scale(1.03) translateY(-2px);
+      box-shadow: 0 12px 32px rgba(27, 94, 32, 0.08);
+    }
+    body.dark .qr-placeholder:hover {
+      background: rgba(30, 50, 30, 0.4);
+    }
+    .qr-placeholder i {
+      font-size: 3.2rem;
+      color: var(--primary);
+      opacity: 0.5;
+      transition: transform 0.4s, opacity 0.4s;
+    }
+    .qr-placeholder:hover i {
+      transform: scale(1.12) rotate(-6deg);
+      opacity: 0.8;
+    }
+    .qr-placeholder span {
+      font-size: var(--text-xs);
+      opacity: 0.4;
+      letter-spacing: 0.8px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* ===== THEME TOGGLE ===== */
+    .theme-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-light);
+      border-radius: 60px;
+      padding: 8px 14px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      box-shadow: var(--shadow);
+      z-index: 999;
+      transition: var(--transition);
+    }
+    .theme-toggle button {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 40px;
+      transition: var(--transition);
+      opacity: 0.4;
+    }
+    .theme-toggle button.active {
+      opacity: 1;
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(27, 94, 32, 0.2);
+    }
+    .theme-toggle button:hover {
+      opacity: 0.8;
+      transform: scale(1.08);
+    }
+
+    /* ===== PDF LOADING OVERLAY ===== */
+    .pdf-loading {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .pdf-loading.active {
+      display: flex;
+    }
+    .pdf-loading .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #4CAF50;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .pdf-loading p {
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .pdf-loading .sub {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1000px) {
+      .flyer {
+        grid-template-columns: 1fr;
+        padding: 32px;
+        gap: 32px;
+      }
+      .flyer-right {
+        order: -1;
+      }
+      .speaker-frame {
+        max-width: 340px;
+      }
+      .hero-title {
+        font-size: var(--text-5xl);
+      }
+      .hero-title .highlight {
+        font-size: var(--text-2xl);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .flyer {
+        padding: 20px;
+        border-radius: 28px;
+        gap: 24px;
+      }
+      .hero-title {
+        font-size: var(--text-4xl);
+      }
+      .hero-title .highlight {
+        font-size: var(--text-xl);
+      }
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      .action-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn {
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: var(--text-sm);
+      }
+      .countdown {
+        justify-content: center;
+      }
+      .header-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .logo-wrapper img {
+        height: 40px;
+      }
+      .theme-toggle {
+        bottom: 16px;
+        right: 16px;
+        padding: 6px 12px;
+      }
+      .speaker-frame {
+        max-width: 280px;
+      }
+      .speaker-name {
+        font-size: var(--text-xl);
+      }
+      .lang-toggle {
+        align-self: center;
+      }
+      .social-row {
+        justify-content: center;
+      }
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .flyer {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        background: white;
+        padding: 30px;
+        gap: 20px;
+        animation: none;
+      }
+      .theme-toggle,
+      .btn-outline,
+      .btn-download,
+      .btn-share,
+      .lang-toggle,
+      .social-row,
+      .pdf-loading {
+        display: none !important;
+      }
+      .speaker-frame {
+        border: 1px solid #ccc;
+      }
+      .info-card,
+      .zoom-block,
+      .countdown-item,
+      .qr-placeholder {
+        background: #f5f5f5;
+        border-color: #ddd;
+      }
+      .hero-title .highlight {
+        -webkit-text-fill-color: #1B5E20;
+        background: none;
+      }
+      .org-badge {
+        background: #1B5E20 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .flyer::before,
+      .flyer::after,
+      .leaf-float {
+        display: none;
+      }
+      body::before {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== PDF LOADING OVERLAY ===== -->
+  <div class="pdf-loading" id="pdfLoading">
+    <div class="spinner"></div>
+    <p>📄 Generating your PDF...</p>
+    <p class="sub">Please wait a moment</p>
+  </div>
+
+  <!-- ===== FLYER ===== -->
+  <div class="flyer" id="flyer">
+    <!-- decorative floating leaves -->
+    <div class="leaf-float">🌿</div>
+    <div class="leaf-float">🍃</div>
+    <div class="leaf-float">🌱</div>
+    <div class="leaf-float">🌾</div>
+
+    <!-- LEFT COLUMN -->
+    <div class="flyer-left">
+      <div class="header-row">
+        <div class="logo-wrapper">
+          <img src="https://www.arcgis.com/sharing/rest/content/items/469cb440a8894d5b813786fd5f28c168/info/media/jji_1784293681445.png?token=au6OghXIuR7T8_U7rf_ef-g..mOBYMVvl52DsxFnuVpiwlIlkt624gWinwBDAccTcdxafqs0g1xbkVjgqoJXK_-s7whOyv-hGeSv-dpjY5u3-dpqr0ZyQRPSsPsh3ZIA_c1zLD8HQ7IP0bzt8N-XCjt4TyTLdhA_GhI5qSHnFqKcxxwh4UbPSw02i9LJit7vht_6yfM6wGOVZrl7arX2dydJX3hMPk7ULeBbAQAcsfZb3TMWABnJ_sE71exM-gkE7z5_W3w.."
+               alt="Roots & Shoots logo"
+               id="logoImg" />
+        </div>
+        <div class="org-badge">
+          <i class="fas fa-leaf"></i> <span id="orgName">Roots & Shoots Global</span>
+        </div>
+      </div>
+
+      <!-- LANGUAGE TOGGLE -->
+      <div class="lang-toggle" id="langToggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="sw">SW</button>
+      </div>
+
+      <div>
+        <h1 class="hero-title">
+          <span id="titleMain">Capacity Building</span>
+          <span class="highlight" id="subtitle">Roots & Shoots Africa Group Call</span>
+        </h1>
+        <div class="hero-sub" id="subhead">with <strong>R&S Africa Grassroots and Groups</strong></div>
+      </div>
+
+      <p class="description" id="description">Join us for an inspiring discussion on challenges and capacity-building needs of Roots & Shoots groups across Africa.</p>
+
+      <!-- countdown -->
+      <div class="countdown">
+        <div class="countdown-item"><i class="far fa-clock"></i> <span id="countdownDisplay">--</span></div>
+      </div>
+
+      <!-- info cards -->
+      <div class="info-grid">
+        <div class="info-card"><i class="fas fa-calendar-alt"></i><div><div class="label" id="dateLabel">Date</div><div class="value" id="dateDisplay">Wednesday, 19 August 2026</div></div></div>
+        <div class="info-card"><i class="fas fa-clock"></i><div><div class="label" id="timeLabel">Time</div><div class="value" id="timeDisplay">16:00 EAT</div></div></div>
+      </div>
+
+      <!-- zoom block -->
+      <div class="zoom-block">
+        <div class="label"><i class="fas fa-video"></i> <span id="zoomLabel">Join via Zoom</span></div>
+        <div class="zoom-link" id="zoomLinkDisplay" title="click to copy">https://zoom.us/example</div>
+        <div class="zoom-meta">
+          <span id="meetingIdWrapper"><i class="fas fa-hashtag"></i> <span id="idLabel">ID</span>: <strong id="meetingID">863 4323 1368</strong></span>
+          <span id="passcodeWrapper"><i class="fas fa-lock"></i> <span id="passLabel">Passcode</span>: <strong id="passcodeDisplay">634051</strong></span>
+        </div>
+      </div>
+
+      <!-- action buttons -->
+      <div class="action-row">
+        <button class="btn" id="joinBtn"><i class="fas fa-video"></i> <span id="joinBtnText">Join Meeting</span></button>
+        <button class="btn btn-outline" id="copyLinkBtn"><i class="fas fa-copy"></i> <span id="copyBtnText">Copy Link</span></button>
+        <button class="btn btn-outline btn-download" id="downloadBtn"><i class="fas fa-download"></i> <span id="downloadBtnText">Download PDF</span></button>
+        <button class="btn btn-outline btn-share" id="shareBtn"><i class="fas fa-share-alt"></i> <span id="shareBtnText">Share</span></button>
+      </div>
+
+      <!-- social media -->
+      <div class="social-row">
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="flyer-right">
+      <div class="speaker-frame">
+        <img src="https://9z3zrkn6fybvejzi.public.blob.vercel-storage.com/Rita"
+             alt="Speaker: Rita Groenewald"
+             id="speakerImg" />
+      </div>
+      <div class="speaker-name" id="speakerName">SPEAKER:  Rita Groenewald</div>
+      <div class="speaker-title" id="speakerTitle">Global Network Coordinator</div>
+
+      <div class="qr-placeholder" id="qrPlaceholder" title="click to copy Zoom link">
+        <i class="fas fa-qrcode"></i>
+        <span id="qrText">scan to join</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== THEME TOGGLE ===== -->
+  <div class="theme-toggle">
+    <button id="lightModeBtn" class="active" title="Light mode"><i class="fas fa-sun"></i></button>
+    <button id="darkModeBtn" title="Dark mode"><i class="fas fa-moon"></i></button>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    (function() {
+      "use strict";
+
+      // ===== FLYER DATA =====
+      const flyerData = {
+        organization: "Roots & Shoots Global",
+        title: "Capacity Building",
+        subtitle: "Roots & Shoots Africa Group Call",
+        speaker: "Rita Groenewald",
+        date: "Wednesday, 19 August 2026",
+        time: "16:00 EAT",
+        meetingID: "863 4323 1368",
+        passcode: "634051",
+        zoomLink: "https://zoom.us/example",
+        description: "Join us for an inspiring discussion on challenges and capacity-building needs of Roots & Shoots groups across Africa.",
+        speakerImage: "https://9z3zrkn6fybvejzi.public.blob.vercel-storage.com/Rita",
+        logoImage: "https://www.arcgis.com/sharing/rest/content/items/469cb440a8894d5b813786fd5f28c168/info/media/jji_1784293681445.png?token=au6OghXIuR7T8_U7rf_ef-g..mOBYMVvl52DsxFnuVpiwlIlkt624gWinwBDAccTcdxafqs0g1xbkVjgqoJXK_-s7whOyv-hGeSv-dpjY5u3-dpqr0ZyQRPSsPsh3ZIA_c1zLD8HQ7IP0bzt8N-XCjt4TyTLdhA_GhI5qSHnFqKcxxwh4UbPSw02i9LJit7vht_6yfM6wGOVZrl7arX2dydJX3hMPk7ULeBbAQAcsfZb3TMWABnJ_sE71exM-gkE7z5_W3w.."
+      };
+
+      // ===== TRANSLATIONS =====
+      const translations = {
+        en: {
+          orgName: "Roots & Shoots Global",
+          titleMain: "Capacity Building",
+          subtitle: "Roots & Shoots Africa Group Call",
+          subhead: "with R&S Africa Grassroots and Groups",
+          description: "Join us for an inspiring discussion on challenges and capacity-building needs of Roots & Shoots groups across Africa.",
+          dateLabel: "Date",
+          timeLabel: "Time",
+          zoomLabel: "Join via Zoom",
+          idLabel: "ID",
+          passLabel: "Passcode",
+          joinBtn: "Join Meeting",
+          copyBtn: "Copy Link",
+          downloadBtn: "Download PDF",
+          shareBtn: "Share",
+          qrText: "scan to join",
+          speakerTitle: "Global Network Coordinator"
+        },
+        fr: {
+          orgName: "Roots & Shoots Mondial",
+          titleMain: "Renforcement des Capacités",
+          subtitle: "Appel de groupe Roots & Shoots Africa",
+          subhead: "avec R&S Africa Grassroots et les groupes",
+          description: "Rejoignez-nous pour une discussion inspirante sur les défis et les besoins de renforcement des capacités des groupes Roots & Shoots à travers l'Afrique.",
+          dateLabel: "Date",
+          timeLabel: "Heure",
+          zoomLabel: "Rejoindre via Zoom",
+          idLabel: "ID",
+          passLabel: "Code",
+          joinBtn: "Rejoindre",
+          copyBtn: "Copier le lien",
+          downloadBtn: "Télécharger PDF",
+          shareBtn: "Partager",
+          qrText: "scanner pour rejoindre",
+          speakerTitle: "Coordinatrice du Réseau Mondial"
+        },
+        sw: {
+          orgName: "Roots & Shoots Duniani",
+          titleMain: "Kujenga Uwezo",
+          subtitle: "Wito wa Kikundi cha Roots & Shoots Africa",
+          subhead: "na R&S Afrika Grassroots and Groups",
+          description: "Jiunge nasi kwa mjadala wa kutia moyo kuhusu changamoto na mahitaji ya kujenga uwezo wa vikundi vya Roots & Shoots kote Afrika.",
+          dateLabel: "Tarehe",
+          timeLabel: "Muda",
+          zoomLabel: "Jiunge kupitia Zoom",
+          idLabel: "Kitambulisho",
+          passLabel: "Nenosiri",
+          joinBtn: "Jiunge",
+          copyBtn: "Nakili Kiungo",
+          downloadBtn: "Pakua PDF",
+          shareBtn: "Shiriki",
+          qrText: "skani ili ujiunge",
+          speakerTitle: "Mratibu wa Mtandao wa Kimataifa"
+        }
+      };
+
+      // ===== DOM REFS =====
+      const $ = (id) => document.getElementById(id);
+      const elements = {
+        orgName: $('orgName'),
+        titleMain: $('titleMain'),
+        subtitle: $('subtitle'),
+        subhead: $('subhead'),
+        description: $('description'),
+        dateLabel: $('dateLabel'),
+        timeLabel: $('timeLabel'),
+        dateDisplay: $('dateDisplay'),
+        timeDisplay: $('timeDisplay'),
+        meetingID: $('meetingID'),
+        passcodeDisplay: $('passcodeDisplay'),
+        zoomLinkDisplay: $('zoomLinkDisplay'),
+        speakerName: $('speakerName'),
+        speakerTitle: $('speakerTitle'),
+        speakerImg: $('speakerImg'),
+        logoImg: $('logoImg'),
+        countdownDisplay: $('countdownDisplay'),
+        qrPlaceholder: $('qrPlaceholder'),
+        zoomLabel: $('zoomLabel'),
+        idLabel: $('idLabel'),
+        passLabel: $('passLabel'),
+        joinBtnText: $('joinBtnText'),
+        copyBtnText: $('copyBtnText'),
+        downloadBtnText: $('downloadBtnText'),
+        shareBtnText: $('shareBtnText'),
+        qrText: $('qrText'),
+        langBtns: document.querySelectorAll('.lang-btn'),
+        pdfLoading: $('pdfLoading')
+      };
+
+      let currentLang = 'en';
+
+      // ===== POPULATE FLYER =====
+      function renderFlyer(lang = 'en') {
+        const t = translations[lang] || translations.en;
+        elements.orgName.textContent = t.orgName;
+        elements.titleMain.textContent = t.titleMain;
+        elements.subtitle.textContent = t.subtitle;
+        elements.subhead.innerHTML = t.subhead;
+        elements.description.textContent = t.description;
+        elements.dateLabel.textContent = t.dateLabel;
+        elements.timeLabel.textContent = t.timeLabel;
+        elements.zoomLabel.textContent = t.zoomLabel;
+        elements.idLabel.textContent = t.idLabel;
+        elements.passLabel.textContent = t.passLabel;
+        elements.joinBtnText.textContent = t.joinBtn;
+        elements.copyBtnText.textContent = t.copyBtn;
+        elements.downloadBtnText.textContent = t.downloadBtn;
+        elements.shareBtnText.textContent = t.shareBtn;
+        elements.qrText.textContent = t.qrText;
+        elements.speakerTitle.textContent = t.speakerTitle;
+
+        elements.dateDisplay.textContent = flyerData.date;
+        elements.timeDisplay.textContent = flyerData.time;
+        elements.meetingID.textContent = flyerData.meetingID;
+        elements.passcodeDisplay.textContent = flyerData.passcode;
+        elements.zoomLinkDisplay.textContent = flyerData.zoomLink;
+        elements.speakerName.textContent = flyerData.speaker;
+        elements.speakerImg.src = flyerData.speakerImage;
+        elements.speakerImg.alt = `Speaker: ${flyerData.speaker}`;
+        elements.logoImg.src = flyerData.logoImage;
+        elements.logoImg.alt = "Roots & Shoots logo";
+      }
+
+      // ===== LANGUAGE TOGGLE =====
+      function setLanguage(lang) {
+        currentLang = lang;
+        renderFlyer(lang);
+        elements.langBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        localStorage.setItem('preferredLang', lang);
+      }
+
+      elements.langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          setLanguage(btn.dataset.lang);
+        });
+      });
+
+      const savedLang = localStorage.getItem('preferredLang');
+      if (savedLang && translations[savedLang]) {
+        setLanguage(savedLang);
+      } else {
+        renderFlyer('en');
+      }
+
+      // ===== COUNTDOWN =====
+      function updateCountdown() {
+        const eventDate = new Date('2026-08-19T16:00:00+03:00');
+        const now = new Date();
+        const diff = eventDate - now;
+        if (diff <= 0) {
+          elements.countdownDisplay.textContent = '🎉 Event started!';
+          return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((diff / (1000 * 60)) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+        elements.countdownDisplay.textContent = `${days}d ${hours}h ${mins}m ${secs}s`;
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      // ===== COPY HELPERS =====
+      function copyText(text, label) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`✅ ${label} copied!`);
+        }).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+          showToast(`✅ ${label} copied!`);
+        });
+      }
+
+      function showToast(msg) {
+        const old = document.querySelector('.toast-msg');
+        if (old) old.remove();
+        const div = document.createElement('div');
+        div.className = 'toast-msg';
+        div.textContent = msg;
+        Object.assign(div.style, {
+          position: 'fixed',
+          bottom: '100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'var(--primary)',
+          color: 'white',
+          padding: '12px 28px',
+          borderRadius: '60px',
+          fontWeight: '600',
+          fontSize: '0.95rem',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+          zIndex: '9999',
+          opacity: '0',
+          transition: 'opacity 0.4s ease, transform 0.4s ease',
+          fontFamily: 'Inter, sans-serif'
+        });
+        document.body.appendChild(div);
+        requestAnimationFrame(() => { div.style.opacity = '1'; });
+        setTimeout(() => {
+          div.style.opacity = '0';
+          setTimeout(() => div.remove(), 400);
+        }, 2200);
+      }
+
+      // ============================================================
+      // PDF GENERATION
+      // ============================================================
+      function generatePDF() {
+        const loading = elements.pdfLoading;
+        const btn = document.getElementById('downloadBtn');
+        const originalText = btn.innerHTML;
+
+        loading.classList.add('active');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        btn.disabled = true;
+
+        const flyerElement = document.getElementById('flyer');
+
+        const opt = {
+          margin: [0.15, 0.15, 0.15, 0.15],
+          filename: `Roots_and_Shoots_Flyer_${flyerData.date.replace(/\s/g, '_')}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: {
+            scale: 2.5,
+            useCORS: true,
+            letterRendering: true,
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--background').trim() || '#F5F7F0',
+            logging: false,
+            width: flyerElement.scrollWidth,
+            height: flyerElement.scrollHeight
+          },
+          jsPDF: {
+            unit: 'in',
+            format: 'a4',
+            orientation: 'portrait'
+          },
+          pagebreak: { mode: 'avoid-all' }
+        };
+
+        html2pdf()
+          .set(opt)
+          .from(flyerElement)
+          .save()
+          .then(function() {
+            loading.classList.remove('active');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            showToast('✅ PDF downloaded successfully!');
+          })
+          .catch(function(err) {
+            console.error('PDF generation error:', err);
+            loading.classList.remove('active');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            showToast('❌ Error generating PDF. Please try again.');
+          });
+      }
+
+      // ===== EVENT BINDINGS =====
+      document.getElementById('copyLinkBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        copyText(flyerData.zoomLink, 'Zoom link');
+      });
+
+      elements.zoomLinkDisplay.addEventListener('click', () => {
+        copyText(flyerData.zoomLink, 'Zoom link');
+      });
+
+      document.getElementById('joinBtn').addEventListener('click', () => {
+        window.open(flyerData.zoomLink, '_blank');
+      });
+
+      document.getElementById('downloadBtn').addEventListener('click', generatePDF);
+
+      document.getElementById('shareBtn').addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: `${flyerData.organization} · ${flyerData.title}`,
+            text: `${flyerData.title}: ${flyerData.subtitle}. ${flyerData.date} at ${flyerData.time}`,
+            url: flyerData.zoomLink,
+          }).catch(() => {});
+        } else {
+          copyText(flyerData.zoomLink, 'Zoom link (share via)');
+        }
+      });
+
+      elements.qrPlaceholder.addEventListener('click', () => {
+        copyText(flyerData.zoomLink, 'Zoom link');
+      });
+
+      document.getElementById('meetingIdWrapper').addEventListener('click', (e) => {
+        e.stopPropagation();
+        copyText(flyerData.meetingID, 'Meeting ID');
+      });
+      document.getElementById('passcodeWrapper').addEventListener('click', (e) => {
+        e.stopPropagation();
+        copyText(flyerData.passcode, 'Passcode');
+      });
+
+      // ===== THEME TOGGLE =====
+      const lightBtn = document.getElementById('lightModeBtn');
+      const darkBtn = document.getElementById('darkModeBtn');
+      const body = document.body;
+
+      function setTheme(mode) {
+        if (mode === 'dark') {
+          body.classList.add('dark');
+          lightBtn.classList.remove('active');
+          darkBtn.classList.add('active');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark');
+          darkBtn.classList.remove('active');
+          lightBtn.classList.add('active');
+          localStorage.setItem('theme', 'light');
+        }
+      }
+
+      lightBtn.addEventListener('click', () => setTheme('light'));
+      darkBtn.addEventListener('click', () => setTheme('dark'));
+
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') setTheme('dark');
+      else setTheme('light');
+
+      console.log('🌿 Roots & Shoots Flyer ready – click Download PDF to generate a professional PDF!');
+    })();
+  </script>
+</body>
+</html>
