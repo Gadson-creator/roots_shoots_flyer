@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>COP session</title>
+  <title>COP session — Roots & Shoots</title>
   <!-- Google Fonts + Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <!-- html2pdf library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- html2canvas library (used for flyer image export) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     /* ============================================================
@@ -194,6 +194,12 @@
     }
     .logo-wrapper img:hover {
       transform: scale(1.06);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .org-badge {
@@ -513,35 +519,48 @@
       border-color: var(--primary);
       box-shadow: 0 12px 36px rgba(27, 94, 32, 0.15);
     }
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none !important;
+    }
 
-    /* social row */
+    /* ===== SOCIAL ROW - IMPROVED VISIBILITY ===== */
     .social-row {
       display: flex;
       gap: 18px;
-      margin-top: 4px;
+      margin-top: 6px;
+      flex-wrap: wrap;
     }
     .social-row a {
       color: var(--text);
-      opacity: 0.35;
-      font-size: 1.2rem;
+      opacity: 0.65;
+      font-size: 1.3rem;
       transition: var(--transition);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: var(--glass);
       backdrop-filter: blur(4px);
       border: 1px solid var(--border-light);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
     .social-row a:hover {
       opacity: 1;
-      transform: translateY(-3px) scale(1.1);
+      transform: translateY(-4px) scale(1.12);
       color: var(--primary);
       border-color: var(--primary);
-      box-shadow: 0 8px 24px rgba(27, 94, 32, 0.1);
+      box-shadow: 0 8px 24px rgba(27, 94, 32, 0.12);
+      background: var(--white);
+    }
+    /* dark mode hover adjustment */
+    body.dark .social-row a:hover {
+      background: rgba(30, 42, 28, 0.8);
+      border-color: var(--primary-light);
     }
 
     /* ===== RIGHT COLUMN ===== */
@@ -552,8 +571,22 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 18px;
+      gap: 12px;
       text-align: center;
+    }
+
+    .eyebrow-tag {
+      display: inline-block;
+      background: var(--gradient-gold);
+      color: #3B2A00;
+      font-weight: 800;
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding: 7px 20px;
+      border-radius: 40px;
+      box-shadow: 0 6px 18px rgba(255, 179, 0, 0.3);
+      margin-bottom: 2px;
     }
 
     .speaker-frame {
@@ -597,6 +630,7 @@
       font-weight: 800;
       color: var(--text);
       letter-spacing: -0.3px;
+      margin-top: 4px;
     }
     .speaker-title {
       font-size: var(--text-base);
@@ -685,7 +719,7 @@
       transform: scale(1.08);
     }
 
-    /* ===== PDF LOADING OVERLAY ===== */
+    /* ===== IMAGE EXPORT LOADING OVERLAY ===== */
     .pdf-loading {
       position: fixed;
       inset: 0;
@@ -851,11 +885,11 @@
 </head>
 <body>
 
-  <!-- ===== PDF LOADING OVERLAY ===== -->
+  <!-- ===== IMAGE EXPORT LOADING OVERLAY ===== -->
   <div class="pdf-loading" id="pdfLoading">
     <div class="spinner"></div>
-    <p>📄 Generating your PDF...</p>
-    <p class="sub">Please wait a moment</p>
+    <p id="loadingTitle">🖼️ Preparing your flyer image...</p>
+    <p class="sub" id="loadingSub">Please wait a moment</p>
   </div>
 
   <!-- ===== FLYER ===== -->
@@ -891,7 +925,7 @@
           <span id="titleMain">COP session</span>
           <span class="highlight" id="subtitle">Roots & Shoots Africa Group Call</span>
         </h1>
-        <div class="hero-sub" id="subhead">with <strong>R&S Africa cordination team</strong></div>
+        <div class="hero-sub" id="subhead">Hosted by <strong id="hostName">Roots & Shoots Africa Coordination Team</strong></div>
       </div>
 
       <p class="description" id="description">Join us for an inspiring discussion focusing on understanding the Roots & Shoots structure, platforms, and available courses.</p>
@@ -904,7 +938,7 @@
       <!-- info cards -->
       <div class="info-grid">
         <div class="info-card"><i class="fas fa-calendar-alt"></i><div><div class="label" id="dateLabel">Date</div><div class="value" id="dateDisplay">Wednesday, 19 August 2026</div></div></div>
-        <div class="info-card"><i class="fas fa-clock"></i><div><div class="label" id="timeLabel">Time</div><div class="value" id="timeDisplay">16:00 EAT</div></div></div>
+        <div class="info-card"><i class="fas fa-clock"></i><div><div class="label" id="timeLabel">Time</div><div class="value" id="timeDisplay">3:00 PM EAT</div></div></div>
       </div>
 
       <!-- zoom block -->
@@ -921,28 +955,30 @@
       <div class="action-row">
         <button class="btn" id="joinBtn"><i class="fas fa-video"></i> <span id="joinBtnText">Join Meeting</span></button>
         <button class="btn btn-outline" id="copyLinkBtn"><i class="fas fa-copy"></i> <span id="copyBtnText">Copy Link</span></button>
-        <button class="btn btn-outline btn-download" id="downloadBtn"><i class="fas fa-download"></i> <span id="downloadBtnText">Download PDF</span></button>
+        <button class="btn btn-outline btn-download" id="downloadBtn"><i class="fas fa-image"></i> <span id="downloadBtnText">Download Flyer Image</span></button>
         <button class="btn btn-outline btn-share" id="shareBtn"><i class="fas fa-share-alt"></i> <span id="shareBtnText">Share</span></button>
       </div>
 
-      <!-- social media -->
+      <!-- SOCIAL MEDIA - CLEAN AND VISIBLE -->
       <div class="social-row">
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <a href="https://www.instagram.com/rootsandshootsglobal?igsh=MTllaWp5MHpjdGsycQ==" target="_blank" rel="noopener noreferrer" title="Instagram Global"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.instagram.com/rootsandshoots.rw?igsh=N2Y3anMwMXJlNG9n" target="_blank" rel="noopener noreferrer" title="Instagram Rwanda"><i class="fab fa-instagram"></i></a>
+        <a href="www.linkedin.com/in/roots-and-shoots-rwanda-97a230362" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://youtube.com/@roots_and_shoots_rwanda?si=Q2DQJHtAAaBdQqyL" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
 
     <!-- RIGHT COLUMN -->
     <div class="flyer-right">
+      <div class="eyebrow-tag" id="speakerEyebrow">Keynote Speaker</div>
       <div class="speaker-frame">
         <img src="https://9z3zrkn6fybvejzi.public.blob.vercel-storage.com/Rita"
              alt="Speaker: Rita Groenewald"
-             id="speakerImg" />
+             id="speakerImg"
+             crossorigin="anonymous" />
       </div>
-      <div class="speaker-name" id="speakerName">SPEAKER:  Rita Groenewald</div>
+      <div class="speaker-name" id="speakerName">Rita Groenewald</div>
       <div class="speaker-title" id="speakerTitle">Global Network Coordinator</div>
 
       <div class="qr-placeholder" id="qrPlaceholder" title="click to copy Zoom link">
@@ -968,9 +1004,12 @@
       // ===== FLYER DATA =====
       const flyerData = {
         organization: "Roots & Shoots Global",
-        title: "Capacity Building",
+        host: "Roots & Shoots Africa Coordination Team",
+        hostShort: "Roots & Shoots Africa",
+        title: "COP session",
         subtitle: "Roots & Shoots Africa Group Call",
         speaker: "Rita Groenewald",
+        speakerRole: "Global Network Coordinator",
         date: "Wednesday, 19 August 2026",
         time: "3:00 PM EAT",
         meetingID: "863 4323 1368",
@@ -985,10 +1024,11 @@
       const translations = {
         en: {
           orgName: "Roots & Shoots Global",
-          titleMain: "Capacity Building",
+          titleMain: "COP session",
           subtitle: "Roots & Shoots Africa Group Call",
-          subhead: "with R&S Africa Grassroots and Groups",
-          description: "Join us for an inspiring discussion on challenges and capacity-building needs of Roots & Shoots groups across Africa.",
+          subheadPrefix: "Hosted by",
+          hostName: "Roots & Shoots Africa Coordination Team",
+          description: "Join us for an inspiring discussion focusing on understanding the Roots & Shoots structure, platforms, and available courses.",
           dateLabel: "Date",
           timeLabel: "Time",
           zoomLabel: "Join via Zoom",
@@ -996,16 +1036,20 @@
           passLabel: "Passcode",
           joinBtn: "Join Meeting",
           copyBtn: "Copy Link",
-          downloadBtn: "Download PDF",
+          downloadBtn: "Download Flyer Image",
           shareBtn: "Share",
           qrText: "scan to join",
-          speakerTitle: "Global Network Coordinator"
+          speakerTitle: "Global Network Coordinator",
+          speakerEyebrow: "Keynote Speaker",
+          loadingTitle: "🖼️ Preparing your flyer image...",
+          loadingSub: "Please wait a moment"
         },
         fr: {
           orgName: "Roots & Shoots Mondial",
-          titleMain: "Renforcement des Capacités",
+          titleMain: "session COP",
           subtitle: "Appel de groupe Roots & Shoots Africa",
-          subhead: "avec R&S Africa Grassroots et les groupes",
+          subheadPrefix: "Organisé par",
+          hostName: "Roots & Shoots Africa Coordination Team",
           description: "Rejoignez-nous pour une discussion enrichissante axée sur la compréhension de la structure, des plateformes et des cours disponibles chez Roots & Shoots.",
           dateLabel: "Date",
           timeLabel: "Heure",
@@ -1014,16 +1058,20 @@
           passLabel: "Code",
           joinBtn: "Rejoindre",
           copyBtn: "Copier le lien",
-          downloadBtn: "Télécharger PDF",
+          downloadBtn: "Télécharger l'image",
           shareBtn: "Partager",
           qrText: "scanner pour rejoindre",
-          speakerTitle: "Coordinatrice du Réseau Mondial"
+          speakerTitle: "Coordinatrice du Réseau Mondial",
+          speakerEyebrow: "Intervenante principale",
+          loadingTitle: "🖼️ Préparation de l'image du flyer...",
+          loadingSub: "Veuillez patienter un instant"
         },
         sw: {
           orgName: "Roots & Shoots Duniani",
-          titleMain: "Kujenga Uwezo",
+          titleMain: "Kipindi cha COP",
           subtitle: "Wito wa Kikundi cha Roots & Shoots Africa",
-          subhead: "na R&S Afrika Grassroots and Groups",
+          subheadPrefix: "Kikundi mwenyeji",
+          hostName: "Roots & Shoots Africa Coordination Team",
           description: "Jiunge nasi kwa majadiliano yenye kutia moyo yanayolenga kuelewa muundo wa Roots & Shoots, majukwaa, na kozi zinazopatikana.",
           dateLabel: "Tarehe",
           timeLabel: "Muda",
@@ -1032,10 +1080,13 @@
           passLabel: "Nenosiri",
           joinBtn: "Jiunge",
           copyBtn: "Nakili Kiungo",
-          downloadBtn: "Pakua PDF",
+          downloadBtn: "Pakua Picha ya Flyer",
           shareBtn: "Shiriki",
           qrText: "skani ili ujiunge",
-          speakerTitle: "Mratibu wa Mtandao wa Kimataifa"
+          speakerTitle: "Mratibu wa Mtandao wa Kimataifa",
+          speakerEyebrow: "Mzungumzaji Mkuu",
+          loadingTitle: "🖼️ Inaandaa picha ya flyer...",
+          loadingSub: "Tafadhali subiri kidogo"
         }
       };
 
@@ -1046,6 +1097,7 @@
         titleMain: $('titleMain'),
         subtitle: $('subtitle'),
         subhead: $('subhead'),
+        hostName: $('hostName'),
         description: $('description'),
         dateLabel: $('dateLabel'),
         timeLabel: $('timeLabel'),
@@ -1056,6 +1108,7 @@
         zoomLinkDisplay: $('zoomLinkDisplay'),
         speakerName: $('speakerName'),
         speakerTitle: $('speakerTitle'),
+        speakerEyebrow: $('speakerEyebrow'),
         speakerImg: $('speakerImg'),
         logoImg: $('logoImg'),
         countdownDisplay: $('countdownDisplay'),
@@ -1068,6 +1121,8 @@
         downloadBtnText: $('downloadBtnText'),
         shareBtnText: $('shareBtnText'),
         qrText: $('qrText'),
+        loadingTitle: $('loadingTitle'),
+        loadingSub: $('loadingSub'),
         langBtns: document.querySelectorAll('.lang-btn'),
         pdfLoading: $('pdfLoading')
       };
@@ -1080,7 +1135,7 @@
         elements.orgName.textContent = t.orgName;
         elements.titleMain.textContent = t.titleMain;
         elements.subtitle.textContent = t.subtitle;
-        elements.subhead.innerHTML = t.subhead;
+        elements.subhead.innerHTML = `${t.subheadPrefix} <strong id="hostName">${t.hostName}</strong>`;
         elements.description.textContent = t.description;
         elements.dateLabel.textContent = t.dateLabel;
         elements.timeLabel.textContent = t.timeLabel;
@@ -1093,6 +1148,9 @@
         elements.shareBtnText.textContent = t.shareBtn;
         elements.qrText.textContent = t.qrText;
         elements.speakerTitle.textContent = t.speakerTitle;
+        elements.speakerEyebrow.textContent = t.speakerEyebrow;
+        elements.loadingTitle.textContent = t.loadingTitle;
+        elements.loadingSub.textContent = t.loadingSub;
 
         elements.dateDisplay.textContent = flyerData.date;
         elements.timeDisplay.textContent = flyerData.time;
@@ -1113,7 +1171,7 @@
         elements.langBtns.forEach(btn => {
           btn.classList.toggle('active', btn.dataset.lang === lang);
         });
-        localStorage.setItem('preferredLang', lang);
+        try { localStorage.setItem('preferredLang', lang); } catch (e) {}
       }
 
       elements.langBtns.forEach(btn => {
@@ -1122,7 +1180,8 @@
         });
       });
 
-      const savedLang = localStorage.getItem('preferredLang');
+      let savedLang = null;
+      try { savedLang = localStorage.getItem('preferredLang'); } catch (e) {}
       if (savedLang && translations[savedLang]) {
         setLanguage(savedLang);
       } else {
@@ -1131,7 +1190,7 @@
 
       // ===== COUNTDOWN =====
       function updateCountdown() {
-        const eventDate = new Date('2026-08-19T16:00:00+03:00');
+        const eventDate = new Date('2026-08-19T03:00');
         const now = new Date();
         const diff = eventDate - now;
         if (diff <= 0) {
@@ -1194,57 +1253,51 @@
       }
 
       // ============================================================
-      // PDF GENERATION
+      // FLYER IMAGE EXPORT (PNG)
       // ============================================================
-      function generatePDF() {
+      function generateImage() {
         const loading = elements.pdfLoading;
         const btn = document.getElementById('downloadBtn');
-        const originalText = btn.innerHTML;
+        const originalHTML = btn.innerHTML;
 
         loading.classList.add('active');
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
         btn.disabled = true;
 
         const flyerElement = document.getElementById('flyer');
+        const bg = getComputedStyle(document.body).getPropertyValue('--background').trim() || '#F5F7F0';
 
-        const opt = {
-          margin: [0.15, 0.15, 0.15, 0.15],
-          filename: `Roots_and_Shoots_Flyer_${flyerData.date.replace(/\s/g, '_')}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: {
-            scale: 2.5,
-            useCORS: true,
-            letterRendering: true,
-            backgroundColor: getComputedStyle(document.body).getPropertyValue('--background').trim() || '#F5F7F0',
-            logging: false,
-            width: flyerElement.scrollWidth,
-            height: flyerElement.scrollHeight
-          },
-          jsPDF: {
-            unit: 'in',
-            format: 'a4',
-            orientation: 'portrait'
-          },
-          pagebreak: { mode: 'avoid-all' }
-        };
+        html2canvas(flyerElement, {
+          scale: 3,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: bg,
+          logging: false,
+          windowWidth: flyerElement.scrollWidth,
+          windowHeight: flyerElement.scrollHeight
+        }).then(function(canvas) {
+          canvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Roots_and_Shoots_Flyer_${flyerData.date.replace(/\s/g, '_')}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
 
-        html2pdf()
-          .set(opt)
-          .from(flyerElement)
-          .save()
-          .then(function() {
             loading.classList.remove('active');
-            btn.innerHTML = originalText;
+            btn.innerHTML = originalHTML;
             btn.disabled = false;
-            showToast('✅ PDF downloaded successfully!');
-          })
-          .catch(function(err) {
-            console.error('PDF generation error:', err);
-            loading.classList.remove('active');
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            showToast('❌ Error generating PDF. Please try again.');
-          });
+            showToast('✅ Flyer image downloaded!');
+          }, 'image/png', 1.0);
+        }).catch(function(err) {
+          console.error('Image generation error:', err);
+          loading.classList.remove('active');
+          btn.innerHTML = originalHTML;
+          btn.disabled = false;
+          showToast('❌ Error generating image. Please try again.');
+        });
       }
 
       // ===== EVENT BINDINGS =====
@@ -1261,13 +1314,13 @@
         window.open(flyerData.zoomLink, '_blank');
       });
 
-      document.getElementById('downloadBtn').addEventListener('click', generatePDF);
+      document.getElementById('downloadBtn').addEventListener('click', generateImage);
 
       document.getElementById('shareBtn').addEventListener('click', () => {
         if (navigator.share) {
           navigator.share({
             title: `${flyerData.organization} · ${flyerData.title}`,
-            text: `${flyerData.title}: ${flyerData.subtitle}. ${flyerData.date} at ${flyerData.time}`,
+            text: `${flyerData.title}: ${flyerData.subtitle}. Hosted by ${flyerData.hostShort}. Speaker: ${flyerData.speaker}. ${flyerData.date} at ${flyerData.time}`,
             url: flyerData.zoomLink,
           }).catch(() => {});
         } else {
@@ -1298,23 +1351,24 @@
           body.classList.add('dark');
           lightBtn.classList.remove('active');
           darkBtn.classList.add('active');
-          localStorage.setItem('theme', 'dark');
+          try { localStorage.setItem('theme', 'dark'); } catch (e) {}
         } else {
           body.classList.remove('dark');
           darkBtn.classList.remove('active');
           lightBtn.classList.add('active');
-          localStorage.setItem('theme', 'light');
+          try { localStorage.setItem('theme', 'light'); } catch (e) {}
         }
       }
 
       lightBtn.addEventListener('click', () => setTheme('light'));
       darkBtn.addEventListener('click', () => setTheme('dark'));
 
-      const savedTheme = localStorage.getItem('theme');
+      let savedTheme = null;
+      try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
       if (savedTheme === 'dark') setTheme('dark');
       else setTheme('light');
 
-      console.log('🌿 Roots & Shoots Flyer ready – click Download PDF to generate a professional PDF!');
+      console.log('🌿 Roots & Shoots Flyer ready – click "Download Flyer Image" to save a high-res PNG!');
     })();
   </script>
 </body>
