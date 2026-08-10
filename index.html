@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Roots&Shoots Africa Region · COP Session</title>
-    <!-- Google Fonts + Font Awesome 6 (Free) -->
+    
+    <!-- Google Fonts + Font Awesome 6 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
     <!-- html2canvas for image export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- QR Code Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         /* ============================================================
@@ -23,9 +26,6 @@
             --primary-lighter: #81C784;
             --secondary: #FFB300;
             --secondary-light: #FFCA28;
-            --accent: #0D47A1;
-            --earth: #6D4C41;
-            --cream: #FFF8E7;
             --background: #F5F7F0;
             --text: #1E2A1E;
             --white: #ffffff;
@@ -34,11 +34,8 @@
             --shadow-hover: 0 40px 80px -20px rgba(0, 20, 0, 0.25);
             --radius: 36px;
             --glass: rgba(255, 248, 231, 0.5);
-            --glass-dark: rgba(20, 30, 20, 0.6);
             --border-light: rgba(27, 94, 32, 0.12);
-            --border-dark: rgba(76, 175, 80, 0.15);
             --transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            --transition-slow: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             --gradient-leaf: linear-gradient(145deg, #1B5E20, #388E3C);
             --gradient-gold: linear-gradient(135deg, #FFB300, #FFCA28);
             --text-xs: 0.75rem;
@@ -62,15 +59,10 @@
             --shadow-hover: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
             --glass: rgba(20, 30, 20, 0.6);
             --border-light: rgba(76, 175, 80, 0.15);
-            --border-dark: rgba(76, 175, 80, 0.25);
         }
 
         /* ===== RESET & BASE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -128,62 +120,21 @@
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .flyer::before {
-            content: '🌿';
-            position: absolute;
-            font-size: 12rem;
-            opacity: 0.04;
-            top: -60px;
-            right: -40px;
-            transform: rotate(25deg);
-            pointer-events: none;
-        }
-        .flyer::after {
-            content: '🍃';
-            position: absolute;
-            font-size: 8rem;
-            opacity: 0.04;
-            bottom: -30px;
-            left: -30px;
-            transform: rotate(-15deg);
-            pointer-events: none;
-        }
-
-        /* floating leaves */
-        .leaf-float {
-            position: absolute;
-            font-size: 2.4rem;
-            opacity: 0.06;
-            pointer-events: none;
-            animation: leafDrift 20s infinite alternate ease-in-out;
-            z-index: 0;
-        }
-        .leaf-float:nth-child(1) { top: 12%; left: 3%; animation-duration: 24s; font-size: 2.8rem; }
-        .leaf-float:nth-child(2) { bottom: 15%; right: 5%; animation-duration: 28s; font-size: 3.2rem; }
-        .leaf-float:nth-child(3) { top: 55%; left: 85%; animation-duration: 22s; font-size: 2rem; }
-        .leaf-float:nth-child(4) { top: 30%; right: 2%; animation-duration: 26s; font-size: 1.6rem; opacity: 0.04; }
-
-        @keyframes leafDrift {
-            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-            50% { transform: translate(20px, -20px) rotate(10deg) scale(1.05); }
-            100% { transform: translate(-10px, 15px) rotate(-5deg) scale(0.95); }
-        }
-
         /* ===== LEFT COLUMN ===== */
         .flyer-left {
             position: relative;
             z-index: 2;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 12px;
         }
 
-        /* ===== LOGO ONLY - removed badge ===== */
+        /* ===== LOGO & HEADER ===== */
         .header-row {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 2px;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
 
         .logo-wrapper img {
@@ -193,62 +144,56 @@
             filter: drop-shadow(0 2px 12px rgba(27, 94, 32, 0.15));
             transition: transform 0.4s;
         }
-        .logo-wrapper img:hover {
-            transform: scale(1.06);
-        }
+        .logo-wrapper img:hover { transform: scale(1.06); }
 
-        /* ===== TITLE SECTION ===== */
+        /* ===== TITLE SECTION (Redesigned) ===== */
         .hero-title {
-            font-size: var(--text-6xl);
-            font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: -0.03em;
+            font-family: 'Playfair Display', serif;
             color: var(--text);
-            margin-bottom: 2px;
+            margin-bottom: 5px;
+            display: flex;
+            flex-direction: column;
+            letter-spacing: -0.02em;
         }
-        .hero-title .big {
-            display: block;
-            font-size: var(--text-6xl);
-        }
-        .hero-title .small {
-            display: block;
-            font-size: var(--text-2xl);
-            font-weight: 700;
-            opacity: 0.85;
-            margin-top: 2px;
-        }
-        .hero-title .highlight {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: block;
-            font-weight: 800;
+        
+        .hero-title .line-1 {
             font-size: var(--text-3xl);
-            margin-top: 4px;
-            animation: shimmer 6s ease-in-out infinite alternate;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.1;
         }
-        @keyframes shimmer {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+        
+        .hero-title .line-2 {
+            font-size: var(--text-2xl);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--text);
+            opacity: 0.85;
+            margin-top: 4px;
+            line-height: 1.2;
         }
 
-        /* ===== TOPIC BADGE ===== */
+        /* ===== TOPIC BADGE (Made Larger) ===== */
         .topic-badge {
             display: inline-block;
             background: var(--gradient-gold);
             color: #3B2A00;
             font-weight: 800;
-            font-size: var(--text-lg);
-            padding: 10px 30px;
+            font-size: var(--text-2xl);
+            padding: 14px 36px;
             border-radius: 60px;
             box-shadow: 0 4px 20px rgba(255, 179, 0, 0.25);
-            align-self: center;
-            margin: 4px 0 2px 0;
-            letter-spacing: 0.3px;
+            align-self: flex-start;
+            margin: 8px 0 8px 0;
+            letter-spacing: 0.5px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
         .topic-badge i {
-            margin-right: 12px;
+            margin-right: 14px;
             color: var(--primary);
         }
 
@@ -278,10 +223,7 @@
             border-color: var(--primary-light);
             box-shadow: 0 8px 24px rgba(27, 94, 32, 0.08);
         }
-        .countdown-item i {
-            color: var(--primary);
-            font-size: 1rem;
-        }
+        .countdown-item i { color: var(--primary); font-size: 1rem; }
         .countdown-item span {
             font-weight: 700;
             color: var(--primary);
@@ -306,7 +248,6 @@
             gap: 14px;
             transition: var(--transition);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-            cursor: default;
         }
         .info-card:hover {
             transform: translateY(-4px) scale(1.02);
@@ -314,9 +255,7 @@
             border-color: var(--primary-light);
             background: rgba(255, 248, 231, 0.6);
         }
-        body.dark .info-card:hover {
-            background: rgba(30, 50, 30, 0.5);
-        }
+        body.dark .info-card:hover { background: rgba(30, 50, 30, 0.5); }
         .info-card i {
             font-size: 1.5rem;
             color: var(--primary);
@@ -324,9 +263,7 @@
             text-align: center;
             transition: transform 0.4s;
         }
-        .info-card:hover i {
-            transform: scale(1.15) rotate(-6deg);
-        }
+        .info-card:hover i { transform: scale(1.15) rotate(-6deg); }
         .info-card .label {
             font-size: var(--text-xs);
             text-transform: uppercase;
@@ -364,10 +301,7 @@
             align-items: center;
             gap: 10px;
         }
-        .zoom-block .label i {
-            color: var(--primary);
-            font-size: 0.9rem;
-        }
+        .zoom-block .label i { color: var(--primary); font-size: 0.9rem; }
         .zoom-link {
             font-family: 'Inter', monospace;
             font-size: var(--text-sm);
@@ -408,48 +342,8 @@
             background: rgba(27, 94, 32, 0.06);
             border-color: var(--primary-light);
         }
-        .zoom-meta i {
-            color: var(--primary);
-        }
-        .zoom-meta strong {
-            font-weight: 700;
-        }
-
-        /* ===== LANGUAGE TOGGLE ===== */
-        .lang-toggle {
-            display: flex;
-            gap: 6px;
-            background: var(--glass);
-            backdrop-filter: blur(8px);
-            padding: 4px 6px;
-            border-radius: 60px;
-            border: 1px solid var(--border-light);
-            align-self: flex-start;
-        }
-        .lang-btn {
-            background: transparent;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: var(--text-xs);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            color: var(--text);
-            opacity: 0.4;
-            transition: var(--transition);
-        }
-        .lang-btn.active {
-            opacity: 1;
-            background: var(--primary);
-            color: var(--white);
-            box-shadow: 0 4px 16px rgba(27, 94, 32, 0.25);
-        }
-        .lang-btn:hover:not(.active) {
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
+        .zoom-meta i { color: var(--primary); }
+        .zoom-meta strong { font-weight: 700; }
 
         /* ===== ACTION BUTTONS ===== */
         .action-row {
@@ -483,16 +377,12 @@
             opacity: 0;
             transition: opacity 0.4s;
         }
-        .btn:hover::after {
-            opacity: 1;
-        }
+        .btn:hover::after { opacity: 1; }
         .btn:hover {
             transform: translateY(-4px) scale(1.02);
             box-shadow: 0 16px 48px rgba(27, 94, 32, 0.3);
         }
-        .btn:active {
-            transform: scale(0.97);
-        }
+        .btn:active { transform: scale(0.97); }
         .btn-outline {
             background: transparent;
             color: var(--text);
@@ -504,11 +394,6 @@
             color: var(--white);
             border-color: var(--primary);
             box-shadow: 0 12px 36px rgba(27, 94, 32, 0.15);
-        }
-        .btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none !important;
         }
 
         /* ===== SOCIAL ROW ===== */
@@ -569,7 +454,7 @@
             box-shadow: 0 30px 60px rgba(0, 20, 0, 0.15);
             background: #e0ece0;
             border: 3px solid var(--white);
-            transition: var(--transition-slow);
+            transition: var(--transition);
             position: relative;
         }
         .speaker-frame::after {
@@ -588,9 +473,7 @@
             display: block;
             transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .speaker-frame:hover img {
-            transform: scale(1.05);
-        }
+        .speaker-frame:hover img { transform: scale(1.05); }
         .speaker-frame:hover {
             transform: translateY(-8px) scale(1.01);
             box-shadow: 0 50px 100px rgba(27, 94, 32, 0.2);
@@ -618,45 +501,44 @@
             text-transform: uppercase;
         }
 
-        .qr-placeholder {
-            margin-top: 6px;
+        /* ===== QR CODE (NEW - REAL) ===== */
+        .qr-container {
+            margin-top: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            background: var(--glass);
-            backdrop-filter: blur(8px);
-            padding: 18px 32px;
-            border-radius: 32px;
-            border: 1.5px dashed var(--primary-light);
+            gap: 4px;
+            background: var(--white);
+            padding: 8px 8px 4px 8px;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(27, 94, 32, 0.08);
             transition: var(--transition);
             cursor: pointer;
+            border: 2px solid var(--border-light);
         }
-        .qr-placeholder:hover {
-            border-color: var(--primary);
-            background: rgba(255, 248, 231, 0.5);
-            transform: scale(1.03) translateY(-2px);
-            box-shadow: 0 12px 32px rgba(27, 94, 32, 0.08);
+        .qr-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(27, 94, 32, 0.12);
+            border-color: var(--primary-light);
         }
-        body.dark .qr-placeholder:hover {
-            background: rgba(30, 50, 30, 0.4);
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .qr-placeholder i {
-            font-size: 3.2rem;
-            color: var(--primary);
-            opacity: 0.5;
-            transition: transform 0.4s, opacity 0.4s;
+        #qrcode img, #qrcode canvas {
+            display: block;
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
         }
-        .qr-placeholder:hover i {
-            transform: scale(1.12) rotate(-6deg);
-            opacity: 0.8;
-        }
-        .qr-placeholder span {
+        .qr-label {
             font-size: var(--text-xs);
-            opacity: 0.4;
-            letter-spacing: 0.8px;
-            font-weight: 600;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
+            padding-bottom: 4px;
         }
 
         /* ===== THEME TOGGLE ===== */
@@ -711,9 +593,7 @@
             flex-direction: column;
             gap: 20px;
         }
-        .pdf-loading.active {
-            display: flex;
-        }
+        .pdf-loading.active { display: flex; }
         .pdf-loading .spinner {
             width: 60px;
             height: 60px;
@@ -722,141 +602,41 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        .pdf-loading p {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        .pdf-loading .sub {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        .pdf-loading p { color: white; font-size: 1.2rem; font-weight: 600; }
+        .pdf-loading .sub { font-size: 0.9rem; opacity: 0.7; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1000px) {
-            .flyer {
-                grid-template-columns: 1fr;
-                padding: 32px;
-                gap: 32px;
-            }
-            .flyer-right {
-                order: -1;
-            }
-            .speaker-frame {
-                max-width: 340px;
-            }
-            .hero-title .big {
-                font-size: var(--text-5xl);
-            }
-            .hero-title .small {
-                font-size: var(--text-xl);
-            }
+            .flyer { grid-template-columns: 1fr; padding: 32px; gap: 32px; }
+            .flyer-right { order: -1; }
+            .speaker-frame { max-width: 340px; }
+            .hero-title .line-1 { font-size: var(--text-2xl); }
+            .hero-title .line-2 { font-size: var(--text-xl); }
         }
 
         @media (max-width: 600px) {
-            .flyer {
-                padding: 20px;
-                border-radius: 28px;
-                gap: 24px;
-            }
-            .hero-title .big {
-                font-size: var(--text-4xl);
-            }
-            .hero-title .small {
-                font-size: var(--text-lg);
-            }
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            .action-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .btn {
-                justify-content: center;
-                padding: 12px 20px;
-                font-size: var(--text-sm);
-            }
-            .countdown {
-                justify-content: center;
-            }
-            .header-row {
-                justify-content: center;
-            }
-            .logo-wrapper img {
-                height: 40px;
-            }
-            .theme-toggle {
-                bottom: 16px;
-                right: 16px;
-                padding: 6px 12px;
-            }
-            .speaker-frame {
-                max-width: 280px;
-            }
-            .speaker-name {
-                font-size: var(--text-xl);
-            }
-            .lang-toggle {
-                align-self: center;
-            }
-            .social-row {
-                justify-content: center;
-            }
-            .topic-badge {
-                font-size: var(--text-base);
-                padding: 8px 20px;
-            }
+            .flyer { padding: 20px; border-radius: 28px; gap: 24px; }
+            .topic-badge { font-size: var(--text-lg); padding: 12px 20px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .action-row { flex-direction: column; align-items: stretch; }
+            .btn { justify-content: center; padding: 12px 20px; font-size: var(--text-sm); }
+            .header-row { justify-content: center; }
+            .logo-wrapper img { height: 40px; }
+            .theme-toggle { bottom: 16px; right: 16px; padding: 6px 12px; }
+            .speaker-frame { max-width: 280px; }
+            .speaker-name { font-size: var(--text-xl); }
+            .social-row { justify-content: center; }
+            #qrcode img, #qrcode canvas { width: 100px; height: 100px; }
         }
 
         /* ===== PRINT ===== */
         @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .flyer {
-                box-shadow: none;
-                border: 1px solid #ccc;
-                background: white;
-                padding: 30px;
-                gap: 20px;
-                animation: none;
-            }
-            .theme-toggle,
-            .btn-outline,
-            .btn-download,
-            .btn-share,
-            .lang-toggle,
-            .social-row,
-            .pdf-loading {
-                display: none !important;
-            }
-            .speaker-frame {
-                border: 1px solid #ccc;
-            }
-            .info-card,
-            .zoom-block,
-            .countdown-item,
-            .qr-placeholder {
-                background: #f5f5f5;
-                border-color: #ddd;
-            }
-            .hero-title .highlight {
-                -webkit-text-fill-color: #1B5E20;
-                background: none;
-            }
-            .flyer::before,
-            .flyer::after,
-            .leaf-float {
-                display: none;
-            }
-            body::before {
-                display: none;
-            }
+            body { background: white; padding: 0; }
+            .flyer { box-shadow: none; border: 1px solid #ccc; background: white; padding: 30px; gap: 20px; animation: none; }
+            .theme-toggle, .btn-outline, .btn-download, .btn-share, .social-row, .pdf-loading { display: none !important; }
+            .speaker-frame { border: 1px solid #ccc; }
+            .info-card, .zoom-block, .countdown-item, .qr-container { background: #f5f5f5; border-color: #ddd; }
         }
     </style>
 </head>
@@ -871,39 +651,24 @@
 
     <!-- ===== FLYER ===== -->
     <div class="flyer" id="flyer">
-        <!-- decorative floating leaves -->
-        <div class="leaf-float">🌿</div>
-        <div class="leaf-float">🍃</div>
-        <div class="leaf-float">🌱</div>
-        <div class="leaf-float">🌾</div>
-
         <!-- LEFT COLUMN -->
         <div class="flyer-left">
-            <!-- LOGO ONLY - no badge -->
+            
+            <!-- LOGO -->
             <div class="header-row">
                 <div class="logo-wrapper">
                     <img src="https://www.arcgis.com/sharing/rest/content/items/469cb440a8894d5b813786fd5f28c168/info/media/jji_1784293681445.png?token=au6OghXIuR7T8_U7rf_ef-g..mOBYMVvl52DsxFnuVpiwlIlkt624gWinwBDAccTcdxafqs0g1xbkVjgqoJXK_-s7whOyv-hGeSv-dpjY5u3-dpqr0ZyQRPSsPsh3ZIA_c1zLD8HQ7IP0bzt8N-XCjt4TyTLdhA_GhI5qSHnFqKcxxwh4UbPSw02i9LJit7vht_6yfM6wGOVZrl7arX2dydJX3hMPk7ULeBbAQAcsfZb3TMWABnJ_sE71exM-gkE7z5_W3w.."
-                    alt="Roots & Shoots logo"
-                    id="logoImg" />
+                    alt="Roots & Shoots logo" />
                 </div>
             </div>
 
-            <!-- LANGUAGE TOGGLE -->
-            <div class="lang-toggle" id="langToggle">
-                <button class="lang-btn active" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="fr">FR</button>
-                <button class="lang-btn" data-lang="sw">SW</button>
+            <!-- TITLE: Redesigned Font & Size -->
+            <div class="hero-title">
+                <span class="line-1">Roots&Shoots Africa Region</span>
+                <span class="line-2">invites you to the COP session</span>
             </div>
 
-            <!-- TITLE: Big + Small -->
-            <div>
-                <h1 class="hero-title">
-                    <span class="big" id="titleBig">Roots&Shoots Africa Region</span>
-                    <span class="small" id="titleSmall">invites you to the COP session</span>
-                </h1>
-            </div>
-
-            <!-- TOPIC BADGE - Centered between title and countdown -->
+            <!-- TOPIC BADGE - Made Large & Prominent -->
             <div class="topic-badge">
                 <i class="fas fa-comments"></i> Topic: R&S Structure and Platforms
             </div>
@@ -963,18 +728,17 @@
             <div class="speaker-frame">
                 <img src="https://9z3zrkn6fybvejzi.public.blob.vercel-storage.com/Rita"
                 alt="Speaker: Rita Groenewald"
-                id="speakerImg"
-                crossorigin="anonymous" />
+                id="speakerImg" />
             </div>
             <!-- Speaker Info -->
             <div class="speaker-label">Speaker</div>
             <div class="speaker-name" id="speakerName">Rita Groenewald</div>
             <div class="speaker-title" id="speakerTitle">Roots & Shoots Global Programme Manager</div>
 
-            <!-- QR Placeholder -->
-            <div class="qr-placeholder" id="qrPlaceholder" title="click to copy Zoom link">
-                <i class="fas fa-qrcode"></i>
-                <span id="qrText">scan to join</span>
+            <!-- REAL QR CODE CONTAINER -->
+            <div class="qr-container" id="qrContainer" title="Scan to join meeting">
+                <div id="qrcode"></div>
+                <div class="qr-label">scan to join</div>
             </div>
         </div>
     </div>
@@ -994,178 +758,44 @@
 
             // ===== FLYER DATA =====
             const flyerData = {
-                organization: "Roots & Shoots Africa",
-                host: "Roots & Shoots Africa Coordination Team",
-                hostShort: "Roots & Shoots Africa",
-                titleBig: "Roots&Shoots Africa Region",
-                titleSmall: "invites you to the COP session",
-                subtitle: "Topic: R&S Structure and Platforms",
-                speaker: "Rita Groenewald",
-                speakerRole: "Roots & Shoots Global Programme Manager",
                 date: "Wednesday, 19 August 2026",
                 time: "3:00 PM EAT",
                 meetingID: "818 7823 5627",
                 passcode: "822444",
-                zoomLink: "https://us06web.zoom.us/j/81878235627?pwd=ShrqezdVnxr1H3PIx9PbVae7B3B3yn.1",
-                speakerImage: "https://9z3zrkn6fybvejzi.public.blob.vercel-storage.com/Rita",
-                logoImage: "https://www.arcgis.com/sharing/rest/content/items/469cb440a8894d5b813786fd5f28c168/info/media/jji_1784293681445.png?token=au6OghXIuR7T8_U7rf_ef-g..mOBYMVvl52DsxFnuVpiwlIlkt624gWinwBDAccTcdxafqs0g1xbkVjgqoJXK_-s7whOyv-hGeSv-dpjY5u3-dpqr0ZyQRPSsPsh3ZIA_c1zLD8HQ7IP0bzt8N-XCjt4TyTLdhA_GhI5qSHnFqKcxxwh4UbPSw02i9LJit7vht_6yfM6wGOVZrl7arX2dydJX3hMPk7ULeBbAQAcsfZb3TMWABnJ_sE71exM-gkE7z5_W3w.."
-            };
-
-            // ===== TRANSLATIONS =====
-            const translations = {
-                en: {
-                    orgName: "Roots & Shoots Africa",
-                    titleBig: "Roots&Shoots Africa Region",
-                    titleSmall: "invites you to the COP session",
-                    subtitle: "Topic: R&S Structure and Platforms",
-                    dateLabel: "Date",
-                    timeLabel: "Time",
-                    zoomLabel: "Join via Zoom",
-                    idLabel: "ID",
-                    passLabel: "Passcode",
-                    joinBtn: "Join Meeting",
-                    copyBtn: "Copy Link",
-                    downloadBtn: "Download Flyer Image",
-                    shareBtn: "Share",
-                    qrText: "scan to join",
-                    speakerTitle: "Roots & Shoots Global Programme Manager",
-                    loadingTitle: "🖼️ Preparing your flyer image...",
-                    loadingSub: "Please wait a moment"
-                },
-                fr: {
-                    orgName: "Roots & Shoots Afrique",
-                    titleBig: "Région Afrique de Roots&Shoots",
-                    titleSmall: "vous invite à la session COP",
-                    subtitle: "Sujet : Structure et plateformes de R&S",
-                    dateLabel: "Date",
-                    timeLabel: "Heure",
-                    zoomLabel: "Rejoindre via Zoom",
-                    idLabel: "ID",
-                    passLabel: "Code",
-                    joinBtn: "Rejoindre",
-                    copyBtn: "Copier le lien",
-                    downloadBtn: "Télécharger l'image",
-                    shareBtn: "Partager",
-                    qrText: "scanner pour rejoindre",
-                    speakerTitle: "Responsable du Programme Mondial Roots & Shoots",
-                    loadingTitle: "🖼️ Préparation de l'image du flyer...",
-                    loadingSub: "Veuillez patienter un instant"
-                },
-                sw: {
-                    orgName: "Roots & Shoots Afrika",
-                    titleBig: "Mkoa wa Afrika wa Roots&Shoots",
-                    titleSmall: "unakualika kwenye kikao cha COP",
-                    subtitle: "Mada: Muundo na Mabaraza ya R&S",
-                    dateLabel: "Tarehe",
-                    timeLabel: "Muda",
-                    zoomLabel: "Jiunge kupitia Zoom",
-                    idLabel: "Kitambulisho",
-                    passLabel: "Nenosiri",
-                    joinBtn: "Jiunge",
-                    copyBtn: "Nakili Kiungo",
-                    downloadBtn: "Pakua Picha ya Flyer",
-                    shareBtn: "Shiriki",
-                    qrText: "skani ili ujiunge",
-                    speakerTitle: "Meneja wa Mpango wa Kimataifa wa Roots & Shoots",
-                    loadingTitle: "🖼️ Inaandaa picha ya flyer...",
-                    loadingSub: "Tafadhali subiri kidogo"
-                }
+                zoomLink: "https://us06web.zoom.us/j/81878235627?pwd=ShrqezdVnxr1H3PIx9PbVae7B3B3yn.1"
             };
 
             // ===== DOM REFS =====
             const $ = (id) => document.getElementById(id);
             const elements = {
-                orgName: $('orgName'),
-                titleBig: $('titleBig'),
-                titleSmall: $('titleSmall'),
-                subtitle: $('subtitle'),
-                dateLabel: $('dateLabel'),
-                timeLabel: $('timeLabel'),
-                dateDisplay: $('dateDisplay'),
-                timeDisplay: $('timeDisplay'),
-                meetingID: $('meetingID'),
-                passcodeDisplay: $('passcodeDisplay'),
-                zoomLinkDisplay: $('zoomLinkDisplay'),
-                speakerName: $('speakerName'),
-                speakerTitle: $('speakerTitle'),
-                speakerImg: $('speakerImg'),
-                logoImg: $('logoImg'),
                 countdownDisplay: $('countdownDisplay'),
-                qrPlaceholder: $('qrPlaceholder'),
-                zoomLabel: $('zoomLabel'),
-                idLabel: $('idLabel'),
-                passLabel: $('passLabel'),
-                joinBtnText: $('joinBtnText'),
-                copyBtnText: $('copyBtnText'),
-                downloadBtnText: $('downloadBtnText'),
-                shareBtnText: $('shareBtnText'),
-                qrText: $('qrText'),
-                loadingTitle: $('loadingTitle'),
-                loadingSub: $('loadingSub'),
-                langBtns: document.querySelectorAll('.lang-btn'),
+                zoomLinkDisplay: $('zoomLinkDisplay'),
                 pdfLoading: $('pdfLoading')
             };
 
-            let currentLang = 'en';
-
-            // ===== POPULATE FLYER =====
-            function renderFlyer(lang = 'en') {
-                const t = translations[lang] || translations.en;
-                elements.orgName.textContent = t.orgName;
-                elements.titleBig.textContent = t.titleBig;
-                elements.titleSmall.textContent = t.titleSmall;
-                elements.subtitle.textContent = t.subtitle;
-                elements.dateLabel.textContent = t.dateLabel;
-                elements.timeLabel.textContent = t.timeLabel;
-                elements.zoomLabel.textContent = t.zoomLabel;
-                elements.idLabel.textContent = t.idLabel;
-                elements.passLabel.textContent = t.passLabel;
-                elements.joinBtnText.textContent = t.joinBtn;
-                elements.copyBtnText.textContent = t.copyBtn;
-                elements.downloadBtnText.textContent = t.downloadBtn;
-                elements.shareBtnText.textContent = t.shareBtn;
-                elements.qrText.textContent = t.qrText;
-                elements.speakerTitle.textContent = t.speakerTitle;
-                elements.loadingTitle.textContent = t.loadingTitle;
-                elements.loadingSub.textContent = t.loadingSub;
-
-                elements.dateDisplay.textContent = flyerData.date;
-                elements.timeDisplay.textContent = flyerData.time;
-                elements.meetingID.textContent = flyerData.meetingID;
-                elements.passcodeDisplay.textContent = flyerData.passcode;
-                elements.zoomLinkDisplay.textContent = flyerData.zoomLink;
-                elements.speakerName.textContent = flyerData.speaker;
-                elements.speakerImg.src = flyerData.speakerImage;
-                elements.speakerImg.alt = `Speaker: ${flyerData.speaker}`;
-                elements.logoImg.src = flyerData.logoImage;
-                elements.logoImg.alt = "Roots & Shoots logo";
-            }
-
-            // ===== LANGUAGE TOGGLE =====
-            function setLanguage(lang) {
-                currentLang = lang;
-                renderFlyer(lang);
-                elements.langBtns.forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.lang === lang);
+            // ============================================================
+            // QR CODE GENERATOR
+            // ============================================================
+            let qrCodeInstance = null;
+            function generateQRCode() {
+                const qrContainer = document.getElementById('qrcode');
+                qrContainer.innerHTML = ''; // Clear previous
+                
+                qrCodeInstance = new QRCode(qrContainer, {
+                    text: flyerData.zoomLink,
+                    width: 120,
+                    height: 120,
+                    colorDark: "#1B5E20",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
                 });
-                try { localStorage.setItem('preferredLang', lang); } catch (e) {}
             }
+            // Generate QR code on load
+            generateQRCode();
 
-            elements.langBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    setLanguage(btn.dataset.lang);
-                });
-            });
-
-            let savedLang = null;
-            try { savedLang = localStorage.getItem('preferredLang'); } catch (e) {}
-            if (savedLang && translations[savedLang]) {
-                setLanguage(savedLang);
-            } else {
-                renderFlyer('en');
-            }
-
-            // ===== COUNTDOWN =====
+            // ============================================================
+            // COUNTDOWN
+            // ============================================================
             function updateCountdown() {
                 const eventDate = new Date('2026-08-19T15:00:00+03:00');
                 const now = new Date();
@@ -1183,7 +813,9 @@
             updateCountdown();
             setInterval(updateCountdown, 1000);
 
-            // ===== COPY HELPERS =====
+            // ============================================================
+            // COPY HELPERS
+            // ============================================================
             function copyText(text, label) {
                 navigator.clipboard.writeText(text).then(() => {
                     showToast(`✅ ${label} copied!`);
@@ -1230,7 +862,7 @@
             }
 
             // ============================================================
-            // FLYER IMAGE EXPORT (PNG) - FIXED AND WORKING
+            // IMAGE EXPORT (High Quality PNG)
             // ============================================================
             function generateImage() {
                 const loading = elements.pdfLoading;
@@ -1244,18 +876,22 @@
 
                 const flyerElement = document.getElementById('flyer');
 
-                // Use html2canvas to capture the flyer
+                // Force the QR Code to render perfectly before capturing
+                if(qrCodeInstance) {
+                    qrCodeInstance.clear();
+                    qrCodeInstance.makeCode(flyerData.zoomLink);
+                }
+
+                // Use html2canvas with ultra high scale
                 html2canvas(flyerElement, {
-                    scale: 3, // High quality
+                    scale: 4, // Ultra High Quality
                     useCORS: true,
                     allowTaint: false,
-                    backgroundColor: getComputedStyle(document.body).getPropertyValue('--background').trim() ||
-                        '#F5F7F0',
+                    backgroundColor: getComputedStyle(document.body).getPropertyValue('--background').trim() || '#F5F7F0',
                     logging: false,
                     width: flyerElement.scrollWidth,
                     height: flyerElement.scrollHeight,
                     onclone: function(doc) {
-                        // Ensure all images are loaded
                         const images = doc.querySelectorAll('img');
                         return Promise.all(Array.from(images).map(img => {
                             if (img.complete) return Promise.resolve();
@@ -1266,16 +902,13 @@
                         }));
                     }
                 }).then(function(canvas) {
-                    // Create download link
                     const link = document.createElement('a');
-                    link.download =
-                    `Roots_and_Shoots_Cop_Session_${flyerData.date.replace(/\s/g, '_')}.png`;
+                    link.download = `Roots_and_Shoots_COP_Session.png`;
                     link.href = canvas.toDataURL('image/png', 1.0);
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
 
-                    // Hide loading overlay
                     loading.classList.remove('active');
                     btn.innerHTML = originalHTML;
                     btn.disabled = false;
@@ -1289,7 +922,9 @@
                 });
             }
 
-            // ===== EVENT BINDINGS =====
+            // ============================================================
+            // EVENT BINDINGS
+            // ============================================================
             document.getElementById('copyLinkBtn').addEventListener('click', function(e) {
                 e.stopPropagation();
                 copyText(flyerData.zoomLink, 'Zoom link');
@@ -1303,14 +938,13 @@
                 window.open(flyerData.zoomLink, '_blank');
             });
 
-            // FIXED: Download button - now working
             document.getElementById('downloadBtn').addEventListener('click', generateImage);
 
             document.getElementById('shareBtn').addEventListener('click', function() {
                 if (navigator.share) {
                     navigator.share({
-                        title: `${flyerData.organization} · COP Session`,
-                        text: `Join the COP Session: ${flyerData.titleBig} ${flyerData.titleSmall}. ${flyerData.date} at ${flyerData.time}`,
+                        title: `Roots & Shoots · COP Session`,
+                        text: `Join the COP Session: Roots&Shoots Africa Region. ${flyerData.date} at ${flyerData.time}`,
                         url: flyerData.zoomLink,
                     }).catch(() => {});
                 } else {
@@ -1318,7 +952,7 @@
                 }
             });
 
-            elements.qrPlaceholder.addEventListener('click', function() {
+            document.getElementById('qrContainer').addEventListener('click', function() {
                 copyText(flyerData.zoomLink, 'Zoom link');
             });
 
@@ -1331,7 +965,9 @@
                 copyText(flyerData.passcode, 'Passcode');
             });
 
-            // ===== THEME TOGGLE =====
+            // ============================================================
+            // THEME TOGGLE
+            // ============================================================
             const lightBtn = document.getElementById('lightModeBtn');
             const darkBtn = document.getElementById('darkModeBtn');
             const body = document.body;
@@ -1341,20 +977,19 @@
                     body.classList.add('dark');
                     lightBtn.classList.remove('active');
                     darkBtn.classList.add('active');
-                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                    localStorage.setItem('theme', 'dark');
                 } else {
                     body.classList.remove('dark');
                     darkBtn.classList.remove('active');
                     lightBtn.classList.add('active');
-                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                    localStorage.setItem('theme', 'light');
                 }
             }
 
             lightBtn.addEventListener('click', function() { setTheme('light'); });
             darkBtn.addEventListener('click', function() { setTheme('dark'); });
 
-            let savedTheme = null;
-            try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
+            let savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') setTheme('dark');
             else setTheme('light');
 
