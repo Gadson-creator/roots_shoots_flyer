@@ -181,19 +181,21 @@
             background: var(--gradient-gold);
             color: #3B2A00;
             font-weight: 800;
-            font-size: var(--text-2xl); font-style: italic;
-            padding: 14px 36px;
+            font-size: var(--text-lg);
+            font-style: italic;
+            padding: 14px 28px;
             border-radius: 60px;
             box-shadow: 0 4px 20px rgba(255, 179, 0, 0.25);
             align-self: flex-start;
             margin: 8px 0 8px 0;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             width: 100%;
             text-align: center;
             border: 2px solid rgba(255, 255, 255, 0.3);
+            line-height: 1.4;
         }
         .topic-badge i {
-            margin-right: 14px;
+            margin-right: 12px;
             color: var(--primary);
         }
 
@@ -445,13 +447,26 @@
             text-align: center;
         }
 
+        /* ===== SPEAKER SECTION – Two Speakers ===== */
+        .speakers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 440px;
+        }
+        .speaker-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
         .speaker-frame {
             width: 100%;
-            max-width: 420px;
             aspect-ratio: 1/1.08;
-            border-radius: 40px;
+            border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 20, 0, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 20, 0, 0.12);
             background: #e0ece0;
             border: 3px solid var(--white);
             transition: var(--transition);
@@ -461,8 +476,8 @@
             content: '';
             position: absolute;
             inset: 0;
-            border-radius: 40px;
-            box-shadow: inset 0 0 60px rgba(27, 94, 32, 0.06);
+            border-radius: 32px;
+            box-shadow: inset 0 0 40px rgba(27, 94, 32, 0.04);
             pointer-events: none;
             z-index: 1;
         }
@@ -475,22 +490,24 @@
         }
         .speaker-frame:hover img { transform: scale(1.05); }
         .speaker-frame:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 50px 100px rgba(27, 94, 32, 0.2);
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 30px 60px rgba(27, 94, 32, 0.18);
         }
 
         .speaker-name {
-            font-size: var(--text-2xl);
+            font-size: var(--text-base);
             font-weight: 800;
             color: var(--text);
-            letter-spacing: -0.3px;
-            margin-top: 4px;
+            letter-spacing: -0.2px;
+            margin-top: 6px;
+            line-height: 1.3;
         }
         .speaker-title {
-            font-size: var(--text-base);
+            font-size: var(--text-xs);
             opacity: 0.7;
             font-weight: 500;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.1px;
+            line-height: 1.3;
         }
         .speaker-label {
             font-size: var(--text-sm);
@@ -499,11 +516,12 @@
             opacity: 0.8;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+            margin-bottom: 4px;
         }
 
-        /* ===== QR CODE (NEW - REAL) ===== */
+        /* ===== QR CODE ===== */
         .qr-container {
-            margin-top: 8px;
+            margin-top: 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -610,24 +628,34 @@
         @media (max-width: 1000px) {
             .flyer { grid-template-columns: 1fr; padding: 32px; gap: 32px; }
             .flyer-right { order: -1; }
-            .speaker-frame { max-width: 340px; }
+            .speakers-grid { max-width: 380px; }
             .hero-title .line-1 { font-size: var(--text-2xl); }
             .hero-title .line-2 { font-size: var(--text-xl); }
+            .topic-badge { font-size: var(--text-base); padding: 12px 20px; }
         }
 
         @media (max-width: 600px) {
             .flyer { padding: 20px; border-radius: 28px; gap: 24px; }
-            .topic-badge { font-size: var(--text-lg); padding: 12px 20px; }
+            .topic-badge { font-size: var(--text-sm); padding: 10px 16px; }
             .info-grid { grid-template-columns: 1fr; }
             .action-row { flex-direction: column; align-items: stretch; }
             .btn { justify-content: center; padding: 12px 20px; font-size: var(--text-sm); }
             .header-row { justify-content: center; }
             .logo-wrapper img { height: 40px; }
             .theme-toggle { bottom: 16px; right: 16px; padding: 6px 12px; }
-            .speaker-frame { max-width: 280px; }
-            .speaker-name { font-size: var(--text-xl); }
+            .speakers-grid { grid-template-columns: 1fr 1fr; gap: 12px; max-width: 300px; }
+            .speaker-frame { border-radius: 20px; }
+            .speaker-name { font-size: var(--text-sm); }
+            .speaker-title { font-size: 0.6rem; }
             .social-row { justify-content: center; }
             #qrcode img, #qrcode canvas { width: 100px; height: 100px; }
+        }
+
+        @media (max-width: 420px) {
+            .speakers-grid { grid-template-columns: 1fr 1fr; gap: 10px; max-width: 260px; }
+            .speaker-name { font-size: 0.7rem; }
+            .speaker-title { font-size: 0.5rem; }
+            .speaker-frame { border-radius: 16px; }
         }
 
         /* ===== PRINT ===== */
@@ -657,20 +685,20 @@
             <!-- LOGO -->
             <div class="header-row">
                 <div class="logo-wrapper">
-                    <img src="https://www.arcgis.com/sharing/rest/content/items/469cb440a8894d5b813786fd5f28c168/info/media/jji_1784293681445.png?token=au6OghXIuR7T8_U7rf_ef-g..mOBYMVvl52DsxFnuVpiwlIlkt624gWinwBDAccTcdxafqs0g1xbkVjgqoJXK_-s7whOyv-hGeSv-dpjY5u3-dpqr0ZyQRPSsPsh3ZIA_c1zLD8HQ7IP0bzt8N-XCjt4TyTLdhA_GhI5qSHnFqKcxxwh4UbPSw02i9LJit7vht_6yfM6wGOVZrl7arX2dydJX3hMPk7ULeBbAQAcsfZb3TMWABnJ_sE71exM-gkE7z5_W3w.."
+                    <img src="https://lbbnq8hwr59f9gfg.public.blob.vercel-storage.com/Jane_log.png"
                     alt="Roots & Shoots logo" />
                 </div>
             </div>
 
-            <!-- TITLE: Redesigned Font & Size -->
+            <!-- TITLE -->
             <div class="hero-title">
                 <span class="line-1">Roots&Shoots Africa Region</span>
                 <span class="line-2">invites you to the COP session</span>
             </div>
 
-            <!-- TOPIC BADGE - Made Large & Prominent -->
+            <!-- TOPIC BADGE - Updated -->
             <div class="topic-badge">
-                <i class="fas fa-comments"></i> Topic: R&S Structure and Platforms
+                <i class="fas fa-comments"></i> Strengthening R&S Programs Through Youth Engagement, Leadership Capacity and Resource Mobilization: Lessons from Rwanda and Mali
             </div>
 
             <!-- COUNTDOWN -->
@@ -678,29 +706,29 @@
                 <div class="countdown-item"><i class="far fa-clock"></i> <span id="countdownDisplay">--</span></div>
             </div>
 
-            <!-- INFO CARDS -->
+            <!-- INFO CARDS - Updated Date & Time -->
             <div class="info-grid">
                 <div class="info-card"><i class="fas fa-calendar-alt"></i>
                     <div>
                         <div class="label" id="dateLabel">Date</div>
-                        <div class="value" id="dateDisplay">Wednesday, 19 August 2026</div>
+                        <div class="value" id="dateDisplay">Wednesday, 23 September 2026</div>
                     </div>
                 </div>
                 <div class="info-card"><i class="fas fa-clock"></i>
                     <div>
                         <div class="label" id="timeLabel">Time</div>
-                        <div class="value" id="timeDisplay">3:00 PM EAT</div>
+                        <div class="value" id="timeDisplay">3:00 – 4:00 PM EAT</div>
                     </div>
                 </div>
             </div>
 
-            <!-- ZOOM BLOCK -->
+            <!-- ZOOM BLOCK - Updated Link, ID, Passcode -->
             <div class="zoom-block">
                 <div class="label"><i class="fas fa-video"></i> <span id="zoomLabel">Join via Zoom</span></div>
-                <div class="zoom-link" id="zoomLinkDisplay" title="click to copy">https://us06web.zoom.us/j/81878235627?pwd=ShrqezdVnxr1H3PIx9PbVae7B3B3yn.1</div>
+                <div class="zoom-link" id="zoomLinkDisplay" title="click to copy">https://us06web.zoom.us/j/88121155791?pwd=824HWzKSimNJrZbeGjpKPa9uoRaSuz.1</div>
                 <div class="zoom-meta">
-                    <span id="meetingIdWrapper"><i class="fas fa-hashtag"></i> <span id="idLabel">ID</span>: <strong id="meetingID">818 7823 5627</strong></span>
-                    <span id="passcodeWrapper"><i class="fas fa-lock"></i> <span id="passLabel">Passcode</span>: <strong id="passcodeDisplay">822444</strong></span>
+                    <span id="meetingIdWrapper"><i class="fas fa-hashtag"></i> <span id="idLabel">ID</span>: <strong id="meetingID">881 2115 5791</strong></span>
+                    <span id="passcodeWrapper"><i class="fas fa-lock"></i> <span id="passLabel">Passcode</span>: <strong id="passcodeDisplay">824HWZ</strong></span>
                 </div>
             </div>
 
@@ -722,20 +750,35 @@
             </div>
         </div>
 
-        <!-- RIGHT COLUMN -->
+        <!-- RIGHT COLUMN – Two Speakers -->
         <div class="flyer-right">
-            <!-- Speaker Photo -->
-            <div class="speaker-frame">
-                <img src="https://9z3zrkn6fybvejzi.public.blob.vercel-storage.com/Rita"
-                alt="Speaker: Rita Groenewald"
-                id="speakerImg" />
-            </div>
-            <!-- Speaker Info -->
-            <div class="speaker-label">Speaker</div>
-            <div class="speaker-name" id="speakerName">Rita Groenewald</div>
-            <div class="speaker-title" id="speakerTitle">Roots & Shoots Global Programme Manager</div>
+            <div class="speaker-label">Speakers</div>
+            
+            <div class="speakers-grid">
+                <!-- Speaker 1: Dr. Clémence Idukunda -->
+                <div class="speaker-card">
+                    <div class="speaker-frame">
+                        <img src="https://lbbnq8hwr59f9gfg.public.blob.vercel-storage.com/Clemence.webp"
+                             alt="Dr. Clémence Idukunda"
+                             id="speakerImg1" />
+                    </div>
+                    <div class="speaker-name" id="speakerName1">Dr. Clémence Idukunda</div>
+                    <div class="speaker-title" id="speakerTitle1">R&S Rwanda Legal Representative</div>
+                </div>
 
-            <!-- REAL QR CODE CONTAINER -->
+                <!-- Speaker 2: Kalifa Mounkoro -->
+                <div class="speaker-card">
+                    <div class="speaker-frame">
+                        <img src="https://lbbnq8hwr59f9gfg.public.blob.vercel-storage.com/kalifa%20mounkoro%21.jfif222.png"
+                             alt="Kalifa Mounkoro"
+                             id="speakerImg2" />
+                    </div>
+                    <div class="speaker-name" id="speakerName2">Kalifa Mounkoro</div>
+                    <div class="speaker-title" id="speakerTitle2">R&S Mali Grass Root Reader</div>
+                </div>
+            </div>
+
+            <!-- QR CODE -->
             <div class="qr-container" id="qrContainer" title="Scan to join meeting">
                 <div id="qrcode"></div>
                 <div class="qr-label">scan to join</div>
@@ -756,13 +799,13 @@
         (function() {
             "use strict";
 
-            // ===== FLYER DATA =====
+            // ===== FLYER DATA – UPDATED =====
             const flyerData = {
-                date: "Wednesday, 19 August 2026",
-                time: "3:00 PM EAT",
-                meetingID: "818 7823 5627",
-                passcode: "822444",
-                zoomLink: "https://us06web.zoom.us/j/81878235627?pwd=ShrqezdVnxr1H3PIx9PbVae7B3B3yn.1"
+                date: "Wednesday, 23 September 2026",
+                time: "3:00 – 4:00 PM EAT",
+                meetingID: "881 2115 5791",
+                passcode: "824HWZ",
+                zoomLink: "https://us06web.zoom.us/j/88121155791?pwd=824HWzKSimNJrZbeGjpKPa9uoRaSuz.1"
             };
 
             // ===== DOM REFS =====
@@ -779,7 +822,7 @@
             let qrCodeInstance = null;
             function generateQRCode() {
                 const qrContainer = document.getElementById('qrcode');
-                qrContainer.innerHTML = ''; // Clear previous
+                qrContainer.innerHTML = '';
                 
                 qrCodeInstance = new QRCode(qrContainer, {
                     text: flyerData.zoomLink,
@@ -790,14 +833,13 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
             }
-            // Generate QR code on load
             generateQRCode();
 
             // ============================================================
-            // COUNTDOWN
+            // COUNTDOWN – Updated to new date
             // ============================================================
             function updateCountdown() {
-                const eventDate = new Date('2026-08-19T15:00:00+03:00');
+                const eventDate = new Date('2026-09-23T15:00:00+03:00');
                 const now = new Date();
                 const diff = eventDate - now;
                 if (diff <= 0) {
@@ -862,29 +904,26 @@
             }
 
             // ============================================================
-            // IMAGE EXPORT (High Quality PNG)
+            // IMAGE EXPORT
             // ============================================================
             function generateImage() {
                 const loading = elements.pdfLoading;
                 const btn = document.getElementById('downloadBtn');
                 const originalHTML = btn.innerHTML;
 
-                // Show loading overlay
                 loading.classList.add('active');
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
                 btn.disabled = true;
 
                 const flyerElement = document.getElementById('flyer');
 
-                // Force the QR Code to render perfectly before capturing
                 if(qrCodeInstance) {
                     qrCodeInstance.clear();
                     qrCodeInstance.makeCode(flyerData.zoomLink);
                 }
 
-                // Use html2canvas with ultra high scale
                 html2canvas(flyerElement, {
-                    scale: 4, // Ultra High Quality
+                    scale: 4,
                     useCORS: true,
                     allowTaint: false,
                     backgroundColor: getComputedStyle(document.body).getPropertyValue('--background').trim() || '#F5F7F0',
@@ -993,7 +1032,7 @@
             if (savedTheme === 'dark') setTheme('dark');
             else setTheme('light');
 
-            console.log('🌿 Roots & Shoots COP Flyer ready – click "Download Flyer Image" to save a high-res PNG!');
+            console.log('🌿 Roots & Shoots COP Flyer updated – click "Download Flyer Image" to save a high-res PNG!');
         })();
     </script>
 </body>
